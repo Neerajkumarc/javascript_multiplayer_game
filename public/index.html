@@ -4,8 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        .player{
+            width: 50px;
+            height: 50px;
+        }
+    </style>
 </head>
 <body>
-    Game
+    <div id="board">
+
+    </div>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    const boardEl = document.getElementById("board")
+  const socket = io();
+  socket.on("userConnected",(socket)=>{
+    const playerEl = document.createElement("div")
+    const playerNameEl = document.createElement("p")
+    playerNameEl.textContent = socket
+    playerEl.appendChild(playerNameEl)
+    playerEl.classList.add("player")
+    playerEl.style.background = "red";
+    boardEl.appendChild(playerEl)   
+  })
+</script>
 </body>
 </html>
