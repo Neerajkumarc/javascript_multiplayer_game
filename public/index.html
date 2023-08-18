@@ -1,33 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
-        .player{
+        .player {
             width: 50px;
             height: 50px;
+            background-color: red;
         }
     </style>
 </head>
-<body>
-    <div id="board">
 
-    </div>
-<script src="/socket.io/socket.io.js"></script>
-<script>
-    const boardEl = document.getElementById("board")
-  const socket = io();
-  socket.on("userConnected",(socket)=>{
-    const playerEl = document.createElement("div")
-    const playerNameEl = document.createElement("p")
-    playerNameEl.textContent = socket
-    playerEl.appendChild(playerNameEl)
-    playerEl.classList.add("player")
-    playerEl.style.background = "red";
-    boardEl.appendChild(playerEl)   
-  })
-</script>
+<body>
+    <canvas id="canvas">
+
+    </canvas>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+
+        const canvas = document.getElementById("canvas")
+        canvas.width = window.innerWidth
+        canvas.height = window.innerHeight
+        const ctx = canvas.getContext("2d")
+        class Player {
+            constructor({ x, y, width, height }) {
+                this.x = x
+                this.y = y
+                this.width = width
+                this.height = height
+            }
+            draw() {
+                ctx.fillStyle = "red"
+                ctx.fillRect(this.x, this.y, this.width, this.height)
+            }
+        }
+        // ctx.fillStyle = "red"
+        // ctx.fillRect(50, 50, 50, 50)
+
+
+
+    </script>
+    <script>
+        const boardEl = document.getElementById("board")
+        const playersMap = {}
+        const socket = io();
+        socket.on("players", (players) => {
+            for (const id in players) {
+                const player = players[id]
+                if (!playersMap[id]) {
+                    playersMap[id] = new Player({ x: player.x, y: player.y, width: player.width, height: player.height })
+                }
+            }
+
+            for (const id in playersMap) {
+                if (!players[id]) {
+                    delete playersMap[id]
+                }
+            }
+            console.log(playersMap);
+        })
+
+
+        function animate() {
+            requestAnimationFrame(animate)
+            ctx.clearRect(0, 0, canvas.width, canvas.height)
+            for (const id in playersMap) {
+                const player = playersMap[id]
+                player.draw()
+            }
+
+        }
+        animate()
+    </script>
 </body>
+
 </html>

@@ -4,18 +4,26 @@ const app = express();
 const http = require('http');
 const server = http.createServer(app);
 const { Server } = require("socket.io");
-const io = new Server(server);
+const io = new Server(server, { pingInterval: 2000, pingTimeout: 5000 });
 
 app.use(express.static("public"))
 
+players = {}
+
 io.on('connection', (socket) => {
-    io.emit("userConnected", socket.id)
     console.log("user connected", socket.id);
-
-
+    players[socket.id] = {
+        x: Math.floor(Math.random() * 500),
+        y: Math.floor(Math.random() * 500),
+        width: 25,
+        height: 25
+    }
+    io.emit("players", players)
+    console.log(players)
     socket.on("disconnect", () => {
-        io.emit("userDisconnected", socket.id);
         console.log("user disconnected", socket.id);
+        delete players[socket.id]
+        io.emit("players", players)
     })
 });
 
