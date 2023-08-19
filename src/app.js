@@ -16,7 +16,8 @@ io.on('connection', (socket) => {
         x: Math.floor(Math.random() * 500),
         y: Math.floor(Math.random() * 500),
         width: 25,
-        height: 25
+        height: 25,
+        color : `hsl(${Math.random()*360}, 100%, 50%)`
     }
     io.emit("players", players)
     console.log(players)
