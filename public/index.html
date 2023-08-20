@@ -52,6 +52,9 @@
                 const player = players[id]
                 if (!playersMap[id]) {
                     playersMap[id] = new Player({ x: player.x, y: player.y, width: player.width, height: player.height, color:player.color})
+                }else{
+                    playersMap[id].x = players[id].x
+                    playersMap[id].y = players[id].y
                 }
             }
 
@@ -60,7 +63,7 @@
                     delete playersMap[id]
                 }
             }
-            console.log(playersMap);
+            // console.log(playersMap);
         })
 
 
@@ -74,6 +77,27 @@
 
         }
         animate()
+
+        addEventListener("keydown",(e)=>{
+            switch(e.key){
+                case "w":
+                    // playersMap[socket.id].y -= 30
+                    socket.emit("keydown", "w")
+                    break;
+                case "a":
+                    // playersMap[socket.id].x -= 30
+                    socket.emit("keydown", "a")
+                    break;
+                case "s":
+                    // playersMap[socket.id].y += 30
+                    socket.emit("keydown", "s")
+                    break;
+                case "d":
+                    // playersMap[socket.id].x += 30
+                    socket.emit("keydown", "d")
+                    break;
+            }
+        })
     </script>
 </body>
 
