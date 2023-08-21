@@ -9,12 +9,12 @@ const io = new Server(server, { pingInterval: 2000, pingTimeout: 5000 });
 app.use(express.static("public"))
 
 players = {}
-const SPEED = 30
+const SPEED = 5
 io.on('connection', (socket) => {
     console.log("user connected", socket.id);
     players[socket.id] = {
-        x: Math.floor(Math.random() * 500),
-        y: Math.floor(Math.random() * 500),
+        x: Math.random() * 500,
+        y: Math.random() * 500,
         width: 25,
         height: 25,
         color : `hsl(${Math.random()*360}, 100%, 50%)`
