@@ -11,8 +11,10 @@ class Player {
         this.color = color
     }
     draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, 20, 0, 2 * Math.PI)
         ctx.fillStyle = this.color
-        ctx.fillRect(this.x, this.y, this.width, this.height)
+        ctx.fill()
     }
 }
 
